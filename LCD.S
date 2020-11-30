@@ -1,6 +1,9 @@
 #include <xc.inc>
 
-global  LCD_Setup, LCD_Write_Message
+extrn	UART_Setup
+
+global  lcd_setup, LCD_Setup, LCD_Write_Message, LCD_Setup_Bottom, LCD_Setup_Top, LCD_delay_x4us, LCD_delay_ms, LCD_Clear
+  
 
 psect	udata_acs   ; named variables in access ram
 LCD_cnt_l:	ds 1   ; reserve 1 byte for variable LCD_cnt_l
@@ -14,9 +17,19 @@ LCD_counter:	ds 1   ; reserve 1 byte for counting through nessage
 
 psect	lcd_code,class=CODE
     
+lcd_setup:	;LCD Setup Code
+	bcf	CFGS	; point to Flash program memory  
+	bsf	EEPGD 	; access Flash program memory
+	call	UART_Setup	; setup UART
+	call	LCD_Setup
+	return  
+	
+	
+
+	
 LCD_Setup:
 	clrf    LATB, A
-	movlw   11000000B	    ; RB0:5 all outputs
+	movlw   0b11000000	    ; RB0:5 all outputs
 	movwf	TRISB, A
 	movlw   40
 	call	LCD_delay_ms	; wait 40ms for LCD to start up properly
@@ -44,6 +57,31 @@ LCD_Setup:
 	call	LCD_Send_Byte_I
 	movlw	10		; wait 40us
 	call	LCD_delay_x4us
+	return
+
+LCD_Setup_Top:	;display cleared and cursor starts on top line
+	movlw	00000001B	; display clear
+	call	LCD_Send_Byte_I
+	movlw	2		; wait 2ms
+	call	LCD_delay_ms
+	movlw	10000000B	; cursor starts on top line
+	call	LCD_Send_Byte_I
+	movlw	10		; wait 40us
+	call	LCD_delay_x4us    
+	return	
+	
+LCD_Setup_Bottom:   ; display isn't cleared and cursor starts bottom left
+	movlw	11000000B	; cursor starts on bottom line
+	call	LCD_Send_Byte_I
+	movlw	10		; wait 40us
+	call	LCD_delay_x4us    
+	return
+	
+LCD_Clear:
+    	movlw	00000001B	; display clear
+	call	LCD_Send_Byte_I
+	movlw	2		; wait 2ms
+	call	LCD_delay_ms
 	return
 
 LCD_Write_Message:	    ; Message stored at FSR2, length stored in W
@@ -114,7 +152,7 @@ lcdlp2:	movlw	250	    ; 1 ms delay
 	bra	lcdlp2
 	return
     
-LCD_delay_x4us:		    ; delay given in chunks of 4 microsecond in W
+LCD_delay_x4us:			; delay given in chunks of 4 microsecond in W
 	movwf	LCD_cnt_l, A	; now need to multiply by 16
 	swapf   LCD_cnt_l, F, A	; swap nibbles
 	movlw	0x0f	    
@@ -125,7 +163,8 @@ LCD_delay_x4us:		    ; delay given in chunks of 4 microsecond in W
 	call	LCD_delay
 	return
 
-LCD_delay:			; delay routine	4 instruction loop == 250ns	    
+LCD_delay:  
+				; delay routine	4 instruction loop == 250ns. 	    
 	movlw 	0x00		; W=0
 lcdlp1:	decf 	LCD_cnt_l, F, A	; no carry when 0x00 -> 0xff
 	subwfb 	LCD_cnt_h, F, A	; no carry when 0x00 -> 0xff
@@ -133,6 +172,7 @@ lcdlp1:	decf 	LCD_cnt_l, F, A	; no carry when 0x00 -> 0xff
 	return			; carry reset so return
 
 
-    end
+ 
 
 
+    

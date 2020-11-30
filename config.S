@@ -6,13 +6,13 @@
 
 ; CONFIG1L
   CONFIG  RETEN = ON            ; VREG Sleep Enable bit (Enabled)
-  CONFIG  INTOSCSEL = HIGH      ; LF-INTOSC Low-power Enable bit (LF-INTOSC in High-power mode during Sleep)
+  CONFIG  INTOSCSEL = LOW     ; LF-INTOSC Low-power Enable bit (LF-INTOSC in High-power mode during Sleep)
   CONFIG  SOSCSEL = DIG         ; SOSC Power Selection and mode Configuration bits (Digital IO selected)
   CONFIG  XINST = OFF           ; Extended Instruction Set (Disabled)
 
 ; CONFIG1H
-  CONFIG  FOSC = HS1            ; Oscillator (HS oscillator (Medium power, 4 MHz - 16 MHz))
-  CONFIG  PLLCFG = ON           ; PLL x4 Enable bit (Enabled)
+  CONFIG  FOSC = INTIO1            ; Oscillator (HS oscillator (Medium power, 4 MHz - 16 MHz))
+  CONFIG  PLLCFG = OFF           ; PLL x4 Enable bit (Enabled)
   CONFIG  FCMEN = OFF           ; Fail-Safe Clock Monitor (Disabled)
   CONFIG  IESO = OFF            ; Internal External Oscillator Switch Over Mode (Disabled)
 
@@ -35,7 +35,7 @@
 
 ; CONFIG3H
   CONFIG  CCP2MX = PORTC        ; CCP2 Mux (RC1)
-  CONFIG  ECCPMX = PORTE        ; ECCP Mux (Enhanced CCP1/3 [P1B/P1C/P3B/P3C] muxed with RE6/RE5/RE4/RE3)
+  CONFIG  ECCPMX = PORTH        ; ECCP Mux (Enhanced CCP1/3 [P1B/P1C/P3B/P3C] muxed with RE6/RE5/RE4/RE3)
   CONFIG  MSSPMSK = 1		; MSSP address masking (7 Bit address masking mode)
   CONFIG  MCLRE = ON            ; Master Clear Enable (MCLR Enabled, RG5 Disabled)
 

@@ -16,6 +16,11 @@
       <itemPath>UART.S</itemPath>
       <itemPath>config.S</itemPath>
       <itemPath>LCD.S</itemPath>
+      <itemPath>kp-w-int.s</itemPath>
+      <itemPath>lcd_write.s</itemPath>
+      <itemPath>sensors.s</itemPath>
+      <itemPath>keypad.s</itemPath>
+      <itemPath>alarm.s</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -34,7 +39,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>ICD3PlatformTool</platformTool>
         <languageToolchain>pic-as</languageToolchain>
-        <languageToolchainVersion>2.30</languageToolchainVersion>
+        <languageToolchainVersion>2.31</languageToolchainVersion>
         <platform>3</platform>
       </toolsSet>
       <packs>
@@ -59,6 +64,7 @@
       </compileType>
       <makeCustomizationType>
         <makeCustomizationPreStepEnabled>false</makeCustomizationPreStepEnabled>
+        <makeUseCleanTarget>false</makeUseCleanTarget>
         <makeCustomizationPreStep></makeCustomizationPreStep>
         <makeCustomizationPostStepEnabled>false</makeCustomizationPostStepEnabled>
         <makeCustomizationPostStep></makeCustomizationPostStep>
@@ -73,7 +79,8 @@
         <property key="ToolFirmwareFilePath"
                   value="Press to browse for a specific firmware version"/>
         <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
-        <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="debugoptions.useswbreakpoints" value="true"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="false"/>
@@ -582,15 +589,14 @@
         <property key="summary-file" value="false"/>
         <property key="summary-hex" value="false"/>
         <property key="summary-mem" value="true"/>
-        <property key="summary-psect" value="true"/>
+        <property key="summary-psect" value="false"/>
         <property key="summary-sha1" value="false"/>
         <property key="summary-sha256" value="false"/>
         <property key="summary-xml" value="false"/>
         <property key="summary-xmlfull" value="false"/>
-        <appendMe value="-Wa,-a -Wl,-Map=output.map"/>
       </pic-as-global>
       <pic-as-linker>
-        <property key="linker-callgraph" value="full"/>
+        <property key="linker-callgraph" value="std"/>
         <property key="linker-checksum" value=""/>
         <property key="linker-custom-options" value=""/>
         <property key="linker-fill" value=""/>
