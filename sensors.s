@@ -20,7 +20,7 @@ CCP7_interrupt_counter	EQU	0xE
 timer_overflow_count	EQU	0xF
 
 psect sensor_code, class=CODE
-	
+;**************************************************************************	
 ranger_set_up:  
     call disable_interrupts   
     clear_data_registers:	    ;clears all registers from data of previous pusle measurements     
@@ -62,6 +62,7 @@ ranger_set_up:
     
 return
 
+;************************************************************************************************
 ranger_reading: ;send out initial pulse, returns with length of echo pulse saved to 0x08 and 0x09
 	initial_pulse: ; ultrasonic ranger wakes up by being triggerd by short pulse in range 2 - 5 us 	    
 	    bsf PORTG, 1, A ;on and off of PORTG creates output square pulse period 1/(fosc = 2E6) * (no. clock cycles = 8) ~ 4us long 
@@ -111,7 +112,7 @@ ranger_reading: ;send out initial pulse, returns with length of echo pulse saved
 	  
 return
 
-
+;********************************************************************************************
 
 disable_interrupts: ;enable all interrupts 
 	    bcf	PIE4, 4, A ;sets the CCP5IE 'interrupt enabled' so that CCPR5IF can be set when capture occurs
@@ -120,7 +121,7 @@ disable_interrupts: ;enable all interrupts
 	    bcf	INTCON, 7, A ; enables all global interrupts
 	    bcf INTCON, 3, A; disable port B mismatch interrupt, this is annoying
 	    return
-
+;******************************************************************************
 silent_PWM: 
     clrf   PR2, A
     clrf   CCP4CON, A			;before 0xB5	;0xB5 = 10110101, 8 msb of PWM duy cycle
@@ -128,10 +129,7 @@ silent_PWM:
     clrf   T2CON, A   
     return
 
-
-	
-
-
+;********************************************************************************
 INTOSC_set_up_2Mhz:
     bcf	    OSCTUNE, 6, A ;disable PLL to times frequency by 4
     
@@ -143,7 +141,7 @@ INTOSC_set_up_2Mhz:
 			;bit 7 set means device enters idle when sleep executed
     return
     
-		
+;*****************************************************************************		
 find_time_difference:
 		movf	pulse_length_low, W, A
 		subwf	no_ones_here_width_low, W, A
